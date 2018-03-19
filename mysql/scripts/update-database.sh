@@ -15,9 +15,7 @@ password=${MYSQL_ROOT_PASSWORD}
 host=${MYSQL_HOST}
 EOF
 
-until check_data; do
-  credentialsFile=/mysql-credentials.cnf
+credentialsFile=/mysql-credentials.cnf
 
-  mysql --defaults-extra-file=$credentialsFile < schema.sql
-  mysql --defaults-extra-file=$credentialsFile bookstore < backup.sql
-done
+mysql --defaults-extra-file=$credentialsFile < /tmp/schema.sql
+mysql --defaults-extra-file=$credentialsFile bookstore < /tmp/backup.sql

@@ -5,7 +5,7 @@ metadata:
   labels:
     "bookstore/example": bookstore
 spec:
-  activeDeadlineSeconds: 100
+  activeDeadlineSeconds: 300
   template:
     metadata:
       name: update-database
