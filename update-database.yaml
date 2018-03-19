@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mysql-database-updater
+  labels:
+    "bookstore/example": bookstore
+spec:
+  activeDeadlineSeconds: 100
+  template:
+    metadata:
+      name: update-database
+    spec:
+      # this creates a temporary container just to run this Job
+      containers:
+      - name: update-database
+        image: db-update:v1
+        imagePullPolicy: IfNotPresent
+
+        env:
+
+          - name: MYSQL_USER
+
+            valueFrom:
+              secretKeyRef:
+                name: mysql-credentials
+
+                key: user
+
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-credentials
+                key: rootpw
+
+          - name: MYSQL_HOST
+            value: mysql.default.svc.cluster.local
+
+        command: ["/tmp/update-database.sh"]
+
+      restartPolicy: OnFailure

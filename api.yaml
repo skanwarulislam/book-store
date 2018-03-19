@@ -1,0 +1,91 @@
+apiVersion: extensions/v1beta1
+
+kind: Deployment
+metadata:
+  name: book-store-api
+  labels:
+    bookstore/example: bookstore
+spec:
+  replicas: 1
+
+  revisionHistoryLimit: 5
+
+  selector:
+    matchLabels:
+      app: book-store-api
+
+  template:
+    metadata:
+
+      labels:
+        app: book-store-api
+
+    spec:
+
+      containers:
+
+      - image: bookstore-api:v2
+
+        imagePullPolicy: IfNotPresent
+        name: book-store-api
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1Gi
+
+        env:
+
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: mysql-credentials
+
+                key: user
+
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+
+              secretKeyRef:
+                name: mysql-credentials
+
+                key: rootpw
+
+
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-credentials
+                key: password
+
+          - name: MYSQL_HOST
+            value: mysql.default.svc.cluster.local
+
+        livenessProbe:
+          tcpSocket:
+            port: 80
+
+        ports:
+        - containerPort: 8080
+
+---
+
+#Book store api service definition.
+apiVersion: v1
+
+kind: Service
+metadata:
+
+  name: api
+  labels:
+   "bookstore/example": bookstore
+spec:
+  ports:
+
+  - port: 8080
+    protocol: TCP
+  selector:
+
+    app: book-store-api
+
+  type: LoadBalancer

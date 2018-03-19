@@ -1,0 +1,68 @@
+apiVersion: extensions/v1beta1
+
+kind: Deployment
+metadata:
+  name: book-store-app
+  labels:
+    bookstore/example: bookstore
+spec:
+  replicas: 1
+
+  revisionHistoryLimit: 5
+
+  selector:
+    matchLabels:
+      app: book-store-app
+
+  template:
+    metadata:
+
+      labels:
+        app: book-store-app
+
+    spec:
+
+      containers:
+
+      - image: bookstore-api:v2
+
+        imagePullPolicy: IfNotPresent
+        name: book-store-app
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1Gi
+
+        env:
+          - name: API_HOST
+            value: api.default.svc.cluster.local
+
+        livenessProbe:
+          tcpSocket:
+            port: 3000
+
+        ports:
+        - containerPort: 3000
+
+---
+
+#Book store api service definition.
+apiVersion: v1
+
+kind: Service
+metadata:
+
+  name: app
+  labels:
+   "bookstore/example": bookstore
+spec:
+  ports:
+
+  - port: 3000
+    protocol: TCP
+  selector:
+
+    app: book-store-app
+
+  type: LoadBalancer
