@@ -24,7 +24,7 @@ spec:
 
       containers:
 
-      - image: bookstore-api:v2
+      - image: bookstore-app:v2
 
         imagePullPolicy: IfNotPresent
         name: book-store-app
@@ -47,7 +47,7 @@ spec:
 
 ---
 
-#Book store api service definition.
+#Book store App service definition.
 apiVersion: v1
 
 kind: Service
