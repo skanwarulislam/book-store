@@ -1,27 +1,36 @@
-This application is not finished yet. But it can be tested to is current state.
-How to run the application
-First Build the API container image
-cd api
-dcoker build -t bookstore-api:v2 .
+This application is not finished yet.
+ 
+To work with minikube in local environment remember to enable hypervisor in your machine.
+By default minikube virtualbox to create its single node
 
+````
+minikube start --cpus 2 --memory 4096 --disk-size 20G
+kubectl config use-context minikube 
+eval $(minikube docker-env)
+````
+First Build the API container image
+````
+cd api
+
+dcoker build -t bookstore-api:v2 .`
+````
 Similarly the app container image
+````
 cd app
 docker build -t bookstore-app:v2
+````
+Similarly the db updater container image
+````
+cd mysql
+docker build -t db-update:v2
+````
 
 If we want to run a local mysql 
 docker run --name=test-mysql --env="MYSQL_ROOT_PASSWORD=mypassword" mysql
 
-To to the pod deploys for kubernetes in local machine install minikube and kubectl
-
-Now to work with minikube in local environment remember to enable hypervisor in your machine.
-First start the minikube it uses virtualbox buy default
-
-`minikube start`
-
-`kubectl config use-context minikube` 
-
-`eval $(minikube docker-env)`
+Now create the pods
 ````
+kubectl create -f secrets.yaml
 kubectl create -f mysql.yaml
 kubectl create -f update-database.yaml
 kubectl create -f api.yaml

@@ -13,7 +13,7 @@ spec:
       # this creates a temporary container just to run this Job
       containers:
       - name: update-database
-        image: db-update:v1
+        image: db-update:v2
         imagePullPolicy: IfNotPresent
 
         env:
