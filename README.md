@@ -1,7 +1,7 @@
 This application is not finished yet.
  
 To work with minikube in local environment remember to enable hypervisor in your machine.
-By default minikube virtualbox to create its single node
+By default minikube uses virtualbox to create its single node
 
 ````
 minikube start --cpus 2 --memory 4096 --disk-size 20G
