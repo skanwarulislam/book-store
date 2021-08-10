@@ -2,7 +2,7 @@
   "require": {
     "php": "^7.0",
     "slim/slim": "^3.9",
-    "illuminate/database": "*"
+    "illuminate/database": "6.20.26"
   },
   "autoload": {
     "psr-4": {
